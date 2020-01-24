@@ -3,4 +3,19 @@
     <string name="app_name">Android Labs</string>
     <string name="hello_message">你好!</string>>
     <string name="ButtonText">I\"我是按钮</string>
+
+
+    <string name="look_at_my_gui">请看我的图形界面：</string>
+    <string name="click_here">点击这里</string>
+    <string name="check_this_out_linear">选中我</string>
+
+    <string name="switch_on_off">设置 开/关</string>
+    <string name="type_here">这里输入</string>
+
+    <string name="switch_on"> 开关 开</string>
+    <string name="switch_off">开关 关</string>
+    <string name="toast_message"> 这里有更多信息 </string>
+    <string name="check_off">复选框 选中</string>
+    <string name="check_on">复选框 不选</string>
 </resources>
+
