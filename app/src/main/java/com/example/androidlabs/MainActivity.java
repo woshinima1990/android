@@ -1,102 +1,80 @@
 package com.example.androidlabs;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.google.android.material.snackbar.Snackbar;
-
-
-
-
 public class MainActivity extends AppCompatActivity {
+
+    static final String PREFERENCE_FILE_NAME = "FileName";
+    static final String EMAIL_ADDRESS_PREFERENCE = "EmailAddress";
+
+    SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        prefs = getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE);
+        String savedString = prefs.getString(EMAIL_ADDRESS_PREFERENCE, "");
+        EditText emailAddress = findViewById(R.id.emailAddress);
+        emailAddress.setText(savedString);
+        Button loginButton = findViewById(R.id.loginButton);
 
-        setContentView(R.layout.activity_main_relative);
-
-
-        TextView textView = findViewById(R.id.textView);
-
-        EditText editText = findViewById(R.id.editText);
-
-        Button btn = findViewById(R.id.button);
-
-        btn.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(MainActivity.this,getResources().getString(R.string.toast_message),Toast.LENGTH_LONG).show();
-            }
+        loginButton.setOnClickListener(bt -> {
+            Intent goToProfile = new Intent(MainActivity.this, ProfileActivity.class);
+            goToProfile.putExtra("EMAIL", emailAddress.getText().toString());
+            startActivity(goToProfile);
         });
 
 
-        final Switch s = findViewById(R.id.switch1);
-        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged (CompoundButton cb, final boolean isChecked){
-                if (isChecked == true){
-                    Snackbar sb = Snackbar.make(cb,getResources().getString(R.string.switch_on), Snackbar.LENGTH_LONG);
-                    sb.setAction("undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View click) {
-                            s.setChecked(!isChecked);
+    }
 
-                        }
-                    });
-                    sb.show();
-                }
-                else{
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//
+//    }
 
-                    Snackbar sb = Snackbar.make(cb, getResources().getString(R.string.switch_off), Snackbar.LENGTH_LONG);
-                    sb.setAction("undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View click) {
-                            s.setChecked(!isChecked);
-                        }
-                    });
-                    sb.show();
-                }
-            }
-        });
+    @Override
+    protected void onPause() {
+        super.onPause();
+        prefs = getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE);
+        EditText emailAddress = findViewById(R.id.emailAddress);
+        saveSharedPrefs(EMAIL_ADDRESS_PREFERENCE, emailAddress.getText().toString());
+    }
 
 
-        CheckBox cb = findViewById(R.id.checkbox);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+    private void saveSharedPrefs(String name, String value)
+    {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(name, value);
+        editor.apply();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-            @Override
-            public void onCheckedChanged (CompoundButton cb, final boolean isChecked){
-                if (isChecked== true){
-                    Snackbar sb = Snackbar.make(cb, getResources().getString(R.string.check_on), Snackbar.LENGTH_LONG);
-                    sb.setAction("undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View click) {
-                            s.setChecked(!isChecked);
-                        }
-                    });
-                    sb.show();
-                }
-                else{
 
-                    Snackbar sb = Snackbar.make(cb,getResources().getString(R.string.check_off), Snackbar.LENGTH_LONG);
-                    sb.setAction("undo", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View click) {
-                            s.setChecked(!isChecked);
-                        }
-                    });
-                    sb.show();
-                }
-            }
-        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 }
